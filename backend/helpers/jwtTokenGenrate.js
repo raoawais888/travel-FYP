@@ -1,10 +1,11 @@
 
+const jwt = require("jsonwebtoken")
 
-
-const tokengenrate = (payoad)=>{
+const tokengenrate = (payload)=>{
 
     const JWT_SECRET = 'your_jwt_secret_key';
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
+      return token;
 
 }
 

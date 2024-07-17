@@ -76,7 +76,7 @@ class UserController {
 
     static login = async (req,res)=>{
 
-
+                      
         try {
 
             const { email, password } = req.body;
@@ -84,26 +84,30 @@ class UserController {
               // Check if user exists
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res.status(400).json({  success:false, message: 'Invalid username or password' });
     }
 
     // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res.status(400).json({ success:false, message: 'Invalid username or password' });
     }
             
 
     // Generate JWT
     const payload = { id: user._id };
-
     const token = tokenGenrate(payload);
-   
-     console.log(token);
+     res.json({
+        message:"Login successfully",
+        token,
+        user,
+        success:true
+     })
 
 
         } catch (error) {
            
+            console.log(error)
             res.json({
                 success:false,
                 message:error

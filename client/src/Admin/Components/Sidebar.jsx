@@ -2,6 +2,10 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
+    
+    const user = JSON.parse( localStorage.getItem('user')); 
+
+      
   return (
    <>
    <div className="app-sidebar sidebar-shadow">
@@ -45,24 +49,25 @@ const Sidebar = () => {
                                         Dashboard
                                     </NavLink>
                                 </li>
-                                
-                              
-                                
-                                <li className="app-sidebar__heading">Agencies</li>
-                                <li>
-                                    <NavLink to="/admin/add-agency">
-                                    <i class="fa-solid fa-building metismenu-icon "></i>
-                                        
-                                        Add Agency
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/admin/agency">
-                                    <i class="fa-solid fa-building metismenu-icon "></i>
-                                    All Agencies
-                                    </NavLink>
-                                </li>
-                                
+
+
+                                {user.role === 1 && (
+        <>
+          <li className="app-sidebar__heading">Agencies</li>
+          <li>
+            <NavLink to="/admin/add-agency">
+              <i className="fa-solid fa-building metismenu-icon"></i>
+              Add Agency
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/admin/agency">
+              <i className="fa-solid fa-building metismenu-icon"></i>
+              All Agencies
+            </NavLink>
+          </li>
+        
+    
                                 <li className="app-sidebar__heading">Users</li>
                                 <li>
                                     <NavLink to="/admin/add-user">
@@ -76,7 +81,9 @@ const Sidebar = () => {
                                         All Users
                                     </NavLink>
                                 </li>
+                                </>
 
+)}
                                 <li className="app-sidebar__heading">Packages</li>
                                 <li>
                                     <NavLink to="/admin/add-package">

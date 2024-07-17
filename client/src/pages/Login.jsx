@@ -23,6 +23,8 @@ const {values , errors , handleChange , handleSubmit , handleBlur }	= useFormik(
 		const resposne = await ApiRequest("/login",values);
 		  if(resposne.success){
 			toast.success(resposne.message);
+			localStorage.setItem('token', resposne.token);
+			localStorage.setItem('user', JSON.stringify(resposne.user));
 
 		  }else{
 			toast.error(resposne.message);

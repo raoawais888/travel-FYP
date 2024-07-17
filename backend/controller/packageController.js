@@ -1,12 +1,23 @@
 const packageModel = require ("../models/packageModel");
+const AgencyModel = require("../models/agencyModel")
 class PackageController {
 
     static addPackage  = async (req,res,file)=>{
+                  
+      
+      try {
+        
 
-        const { location, price, startDate, endDate, description } = req.body;
+        const { location, price, startDate, endDate, description,user } = req.body;
+             
+         const userGet = JSON.parse(user);
+         const agency =  await AgencyModel.findOne({userId:userGet._id});
+       
+         
+
         const images = req.files.map((file) => file.path);
             
-        const packagDoc = packageModel({ location, price, startDate, endDate, description , images } );
+        const packagDoc = packageModel({ location, price, startDate, endDate, description , images , agencyId : agency._id  } );
 
         const data = await packagDoc.save()
           
@@ -18,6 +29,17 @@ class PackageController {
         });
 
 
+      } catch (error) {
+        
+
+        res.json({
+          success:false,
+           message: error
+         
+         });
+      }
+
+        
     }
 
 

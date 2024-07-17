@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 
 const AddPackage = () => {
    
+  const user = JSON.parse( localStorage.getItem('user')); 
   const [images, setImages] = useState([]);
   let navigate = useNavigate();
 
@@ -45,10 +46,11 @@ const AddPackage = () => {
     formData.append('endDate', values.endDate);
     formData.append('description', values.description);
     images.forEach((image) => {
-      formData.append('images', image.file);
+    formData.append('images', image.file);
+    formData.append('user', JSON.stringify(user));
     });
 
-   const response = await  axios.post('http://localhost:8000/admin/add-package', formData, {
+   const response = await  axios.post('http://localhost:8000/admin/add-package', formData , {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
