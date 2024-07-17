@@ -1,35 +1,64 @@
 const userModel = require("../models/userModel.js");
+const VisitModel = require("../models/VisitorUserModel.js")
 const bcrypt = require('bcryptjs');
 const tokenGenrate = require("../helpers/jwtTokenGenrate.js")
 class UserController {
 
     static register = async (req,res) =>{
 
+        const {email , password , role} = req.body;
+          const emialCheck = await userModel.findOne({email});
+
+          if(emialCheck){
+            res.json({
+                success:false,
+                message:`This email ${email} already exist`,
+                
+             })
+
+          }
+
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword =  await bcrypt.hash(password, salt);
 
         try {
 
-            const {name , email , companyEmail , companyName , country , password} = req.body;
-    
-            const salt = await bcrypt.genSalt(10);
-            const hashPassword =  await bcrypt.hash(password, salt);
+            if(role === 3){
+            const {name , companyEmail , companyName , country } = req.body;      
+            
             const user = new  userModel({
-    
-                name:name,
+               
                 email:email,
+                password:hashPassword,
+                role:role
+
+
+                
+            })
+    
+
+
+            const  saveUser =  await user.save();
+                
+                  
+            const visitUser = new VisitModel({
+                name:name,
                 companyEmail:companyEmail,
                 companyName:companyName,
                 country:country,
-                password:hashPassword
-            })
-    
-             await user.save();
                 
+                userId : saveUser._id
+
+            })
+
+            await visitUser.save();
              res.json({
                 success:true,
                 message:"User Successfuly Register",
                 data : req.body
              })
     
+            }
             
         } catch (error) {
             

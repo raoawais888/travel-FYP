@@ -5,19 +5,19 @@ const packageSchema = new Schema({
   location: {
     type: String,
     required: true
-  },
-  price: {
+   },
+   price: {
     type: Number,
     required: true
-  },
-  startDate: {
+   },
+   startDate: {
     type: Date,
     required: true
-  },
-  endDate: {
+   },
+   endDate: {
     type: Date,
     required: true
-  },
+   },
   description: {
     type: String,
     required: true
@@ -26,19 +26,11 @@ const packageSchema = new Schema({
     type: String,
     required: true
   }],
-//   reviews: [{
-//     type: Schema.Types.ObjectId,
-//     ref: 'Review'  
-//   }],
-//   comments: [{
-//     type: Schema.Types.ObjectId,
-//     ref: 'Comment'  
-//   }],
-//   agencyId: {
-//     type: Schema.Types.ObjectId,
-//     ref: 'Agency',  
-//     required: true
-//   }
+    agencyId: {
+     type: Schema.Types.ObjectId,
+     ref: 'Agency',  
+     required: true
+   }
 });
 
 const Package = mongoose.model('Packages', packageSchema);

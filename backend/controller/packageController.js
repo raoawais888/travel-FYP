@@ -48,6 +48,71 @@ class PackageController {
 
      
 
+       static singlePackage =  async (req, res) => {
+        const { id } = req.params;
+      
+        try {
+          const singlePackage = await packageModel.findById(id);
+      
+          if (!singlePackage) {
+            return res.status(404).json({ success: false, message: 'Package not found' });
+          }
+      
+          res.json({ success: true,package: singlePackage });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ success: false, message: 'Server error' });
+        }
+      };
+
+
+
+
+
+     static update =   async (req, res) => {
+        const packageId = req.params.id;
+        const { location, price, startDate, endDate, description } = req.body;
+        const images = req.files.map(file => ({
+          path: file.path // store file path or URL as needed
+        }));
+      
+        // Example: Update package in database
+        try {
+          // Your database update logic here
+          // Example using a hypothetical database model Package
+          const UpdatePackage = await packageModel.findByIdAndUpdate(packageId, {
+            location,
+            price,
+            startDate,
+            endDate,
+            description,
+            images: images.map(image => image.path) // assuming you store paths in database
+          });
+      
+          res.json({ success: true, message: 'Package updated successfully' });
+        } catch (error) {
+          console.error('Error updating package:', error);
+          res.status(500).json({ success: false, error: 'Failed to update package' });
+        }
+      };
+
+      static remove = async (req, res) => {
+        const { packageId } = req.params;
+    
+        try {
+            const deletedPackage = await packageModel.findByIdAndDelete(packageId);
+    
+            if (!deletedPackage) {
+                return res.status(404).json({success:false , message: 'Package not found' });
+            }
+    
+            res.status(200).json({ message: 'Package removed successfully' ,success:true });
+        } catch (error) {
+            console.error('Error removing package:', error);
+            res.status(500).json({ message: 'Server error' , success:false });
+        }
+    };
+
 }
 
 

@@ -14,7 +14,9 @@ const Register = () => {
 			companyEmail: '',
 			companyName: '',
 			country: '',
-			password: ''
+			password: '', 
+			role: 3
+
 		};
 
 	const {values , errors , handleChange , handleSubmit , handleBlur }	= useFormik({

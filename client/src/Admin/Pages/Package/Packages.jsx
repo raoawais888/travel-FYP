@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import AdminMasterLayout from '../../AdminMasterLayout'
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Packages = () => {
+  const navigate = useNavigate();
     const [packages, setPackages] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -33,6 +36,24 @@ const Packages = () => {
     setPage(1); // Reset page when searching
   };
 
+
+   const handleRemove = async (packageId) => {
+    try {
+        const response =  await axios.delete(`http://localhost:8000/admin/packages/${packageId}`);
+        setPackages(packages.filter((pkg) => pkg._id !== packageId));
+        if(response.data.success){
+          toast.success(response.data.message);
+        }
+        
+    } catch (error) {
+      toast.error(response.data.error);
+    }
+  };
+
+  const handleEdit = (packageId) => {
+    navigate(`/admin/packages/edit/${packageId}`);
+  };
+
   return (
     
     <AdminMasterLayout>
@@ -54,9 +75,9 @@ const Packages = () => {
                 <div class="main-card mb-3 card">
                     <div class="card-body">
                         <h5 class="card-title">Packages</h5>
-                        <form onSubmit={handleSearchSubmit}>
-                       <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search by location" />
-                       <button type="submit">Search</button>
+                        <form onSubmit={handleSearchSubmit} className='search_filter'>
+                       <input type="text" value={searchTerm} onChange={handleSearchChange} className='form-control w-25' placeholder="Search by location" />
+                       <button type="submit" className='btn btn-primary'>Search</button>
                        </form>
                         <table class="mb-0 table table-bordered">
                             <thead>
@@ -77,8 +98,8 @@ const Packages = () => {
                                     <td>{data.price}</td>
                                     <td>{`${moment(data.startDate).format('YYYY-MM-DD')} To  ${ moment(data.endDate).format('YYYY-MM-DD') }`}</td>
                                     <td> <img src={`http://localhost:8000/${data.images[0]}`} alt="" width={30} height={30} /> </td>
-                                      <td> <button className='btn btn-small btn-primary '>Edit </button>  </td>
-                                      <td> <button className='btn btn-small btn-danger' >remove </button>  </td>
+                                      <td> <button className='btn btn-small btn-primary ' onClick={() => handleEdit(data._id)}>Edit </button>  </td>
+                                      <td> <button className='btn btn-small btn-danger' onClick={()=>{handleRemove(data._id)}} >remove </button>  </td>
                                    
                                 </tr>
                                 
@@ -89,11 +110,20 @@ const Packages = () => {
                         </table>
 
  {/* Pagination controls */}
- {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index} onClick={() => setPage(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
+    
+ <nav aria-label="Page navigation example ">
+  <ul class="pagination jutify-content-end mt-3">
+  {Array.from({ length: totalPages }, (_, index) => (
+    <li class="page-item"><a class="page-link" href="#" key={index} onClick={() => setPage(index + 1)}>
+    {index + 1}
+</a></li>
+  ))}
+  </ul>
+</nav>
+
+
+        
+      
                         
                     </div>
                 </div>
