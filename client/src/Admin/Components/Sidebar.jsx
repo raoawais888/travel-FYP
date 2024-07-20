@@ -51,7 +51,7 @@ const Sidebar = () => {
                                 </li>
 
 
-                                {user.role === 1 && (
+                                {/* {user.role === 1 && ( */}
         <>
           <li className="app-sidebar__heading">Agencies</li>
           <li>
@@ -83,7 +83,7 @@ const Sidebar = () => {
                                 </li>
                                 </>
 
-)}
+{/* )} */}
                                 <li className="app-sidebar__heading">Packages</li>
                                 <li>
                                     <NavLink to="/admin/add-package">

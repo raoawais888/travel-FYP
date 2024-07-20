@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import MasterLyout from "../MasterLyout";
 import Banner from "../components/Shared/Banner";
 import Seaarch from "../components/Shared/Seaarch";
 import axios from 'axios';
-
+import moment from 'moment';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import { RotatingLines } from 'react-loader-spinner';
 
 const PackageDetails = () => {
   const [data, setData] = useState({ images: [] });
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
   const { packageId } = useParams();
 
@@ -22,6 +24,8 @@ const PackageDetails = () => {
         setData(packageData);
       } catch (error) {
         console.error('Error fetching package:', error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
@@ -37,6 +41,20 @@ const PackageDetails = () => {
     autoplayTimeout: 3000,
     autoplayHoverPause: true,
   };
+
+  if (loading) {
+    return (
+      <div className="loader-container">
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="96"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <MasterLyout>
@@ -56,7 +74,7 @@ const PackageDetails = () => {
                   </div>
                   <div className="hotel_title_button ml-lg-auto text-lg-right">
                     <div className="button book_button trans_200">
-                      <a href="#">book<span></span><span></span><span></span></a>
+                      <NavLink to={`/book-now/${data._id}`}> book<span></span><span></span><span></span></NavLink>
                     </div>
                   </div>
                 </div>
@@ -130,80 +148,21 @@ const PackageDetails = () => {
 
                 {/* Hotel Info Text */}
                 <div className="hotel_info_text">
-                    <h4>Other Details</h4>
+                  <h4>Other Details</h4>
+                  <b>Price : </b> $ {data.price}
                   <p> {data.description} </p>
-                    <b>Dates:</b> {data.startDate}
+                  <b>Dates : </b> {`${moment(data.startDate).format('YYYY-MM-DD')}  To  ${ moment(data.endDate).format('YYYY-MM-DD') }`}
 
-                </div>
-
-                {/* Hotel Info Tags */}
-                <div className="hotel_info_tags">
-                  <ul className="hotel_icons_list">
-                    <li className="hotel_icons_item"><img src="images/post.png" alt="" /></li>
-                    <li className="hotel_icons_item"><img src="images/compass.png" alt="" /></li>
-                    <li className="hotel_icons_item"><img src="images/bicycle.png" alt="" /></li>
-                    <li className="hotel_icons_item"><img src="images/sailboat.png" alt="" /></li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Rooms */}
-              <div className="rooms">
-                {/* Room */}
-                <div className="room">
-                  <div className="row">
-                    <div className="col-lg-2">
-                      <div className="room_image"><img src="images/room_1.jpg" alt="https://unsplash.com/@grovemade" /></div>
-                    </div>
-                    <div className="col-lg-7">
-                      <div className="room_content">
-                        <div className="room_title">Double or Twin Room</div>
-                        <div className="room_price">$99/night</div>
-                        <div className="room_text">FREE cancellation before 23:59 on 20 December 2017</div>
-                        <div className="room_extra">Breakfast $7.50</div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 text-lg-right">
-                      <div className="room_button">
-                        <div className="button book_button trans_200"><a href="#">book<span></span><span></span><span></span></a></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Room */}
-                <div className="room">
-                  <div className="row">
-                    <div className="col-lg-2">
-                      <div className="room_image"><img src="images/room_2.jpg" alt="https://unsplash.com/@oowgnuj" /></div>
-                    </div>
-                    <div className="col-lg-7">
-                      <div className="room_content">
-                        <div className="room_title">Double or Twin Room</div>
-                        <div className="room_price">$99/night</div>
-                        <div className="room_text">FREE cancellation before 23:59 on 20 December 2017</div>
-                        <div className="room_extra">Breakfast $7.50</div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 text-lg-right">
-                      <div className="room_button">
-                        <div className="button book_button trans_200"><a href="#">book<span></span><span></span><span></span></a></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Location on Map */}
-              <div className="location_on_map">
-                <div className="location_on_map_title">location on map</div>
-                {/* Google Map */}
-                <div className="travelix_map">
-                  <div id="google_map" className="google_map">
-                    <div className="map_container">
-                      <div id="map"></div>
-                    </div>
-                  </div>
+                  <h4>Agency Detail</h4>
+                  {data.agencyId ? (
+                    <>
+                      <b>Agency Name : </b>  {data.agencyId.agencyName}  <br />
+                      <b>Agency Address : </b>  {data.agencyId.agencyAddress} <br />
+                      <b>Agency Number : </b>  {data.agencyId.agencyNumber}
+                    </>
+                  ) : (
+                    <p>No agency details available.</p>
+                  )}
                 </div>
               </div>
             </div>

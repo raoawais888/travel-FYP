@@ -31,6 +31,7 @@ class PackageController {
 
       } catch (error) {
         
+        console.log(error)
 
         res.json({
           success:false,
@@ -56,9 +57,11 @@ class PackageController {
       
         try {
           const packages = await packageModel.find(query)
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .exec();
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .populate("agencyId")
+          .exec();
+          // console.log(packages);
       
           const count = await packageModel.countDocuments(query);
           res.json({ success: true, packages, totalPages: Math.ceil(count / limit) });
@@ -74,8 +77,9 @@ class PackageController {
         const { id } = req.params;
       
         try {
-          const singlePackage = await packageModel.findById(id);
+          const singlePackage = await packageModel.findById(id).populate("agencyId");
       
+          console.log("single::::::::" , singlePackage)
           if (!singlePackage) {
             return res.status(404).json({ success: false, message: 'Package not found' });
           }

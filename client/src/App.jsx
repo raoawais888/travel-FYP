@@ -20,6 +20,7 @@ import AdminBlogs from './Admin/Pages/blog/Blogs';
 import EditPackage from "./Admin/Pages/Package/EditPackage";
 import EditAgency from './Admin/Pages/Agency/EditAgency';
 import PackageDetails from './pages/PackageDetails';
+import Checkout from './pages/Checkout';
 import ProtectedRoute from './ProtectedRoute'; // Import the ProtectedRoute component
 
 import { ToastContainer } from 'react-toastify';
@@ -33,6 +34,8 @@ function App() {
         <Route path='/about' element={<About />} />
         <Route path='/offers' element={<Offers />} />
         <Route path='/package-details/:packageId' element={<PackageDetails />} />
+        <Route path='/book-now/:packageId' element={<Checkout />} />
+     
         <Route path='/blogs' element={<Blogs />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/login' element={<Login />} />
