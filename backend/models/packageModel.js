@@ -30,7 +30,12 @@ const packageSchema = new Schema({
      type: Schema.Types.ObjectId,
      ref: 'Agency',  
      required: true
-   }
+   },
+   userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users',  
+    required: true
+  },
 });
 
 const Package = mongoose.model('Packages', packageSchema);

@@ -47,7 +47,7 @@ const AddPackage = () => {
     formData.append('description', values.description);
     images.forEach((image) => {
     formData.append('images', image.file);
-    formData.append('user', JSON.stringify(user));
+    formData.append('user', JSON.stringify(user._id));
     });
 
    const response = await  axios.post('http://localhost:8000/admin/add-package', formData , {

@@ -15,12 +15,11 @@ const Home = () => {
     <>
     <MasterLyout >
     <Hero />
-    <Seaarch />
     <TourSection />
     <Packages />
-       <Offers />
+       {/* <Offers /> */}
        <Testimonial />
-       <Trending />
+       {/* <Trending /> */}
        <Contact />
        
 

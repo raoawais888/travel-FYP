@@ -2,7 +2,11 @@ import React from "react"
 import MasterLyout from "../MasterLyout"
 import Banner from "../components/Shared/Banner"
 
+import ContactForm from "../components/Shared/ContactForm"
+
 const Contact = () => {
+
+	
   return (
     <MasterLyout>
       <Banner title="Contact" image="url(images/contact_background.jpg)" />
@@ -16,13 +20,7 @@ const Contact = () => {
 					{/* <!-- Contact Form --> */}
 					<div className="contact_form_container">
 						<div className="contact_title text-center">get in touch</div>
-						<form action="#" id="contact_form" className="contact_form text-center">
-							<input type="text" id="contact_form_name" className="contact_form_name input_field" placeholder="Name" required="required" data-error="Name is required." />
-							<input type="text" id="contact_form_email" className="contact_form_email input_field" placeholder="E-mail" required="required" data-error="Email is required." />
-							<input type="text" id="contact_form_subject" className="contact_form_subject input_field" placeholder="Subject" required="required" data-error="Subject is required." />
-							<textarea id="contact_form_message" className="text_field contact_form_message" name="message" rows="4" placeholder="Message" required="required" data-error="Please, write us a message."></textarea>
-							<button type="submit" id="form_submit_button" className="form_submit_button button trans_200">send message<span></span><span></span><span></span></button>
-						</form>
+						 <ContactForm />
 					</div>
 
 				</div>

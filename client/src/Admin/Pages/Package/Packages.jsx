@@ -15,7 +15,11 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/admin/packages?page=${page}&search=${searchTerm}`);
+
+        const userGet = JSON.parse(localStorage.getItem("user"))
+        
+
+        const response = await axios.get(`http://localhost:8000/admin/packages/${userGet._id}`);
         setPackages(response.data.packages);
         setTotalPages(response.data.totalPages);
         console.log("all packages ",setPackages)
@@ -75,10 +79,7 @@ const Packages = () => {
                 <div class="main-card mb-3 card">
                     <div class="card-body">
                         <h5 class="card-title">Packages</h5>
-                        <form onSubmit={handleSearchSubmit} className='search_filter'>
-                       <input type="text" value={searchTerm} onChange={handleSearchChange} className='form-control w-25' placeholder="Search by location" />
-                       <button type="submit" className='btn btn-primary'>Search</button>
-                       </form>
+                     
                         <table class="mb-0 table table-bordered">
                             <thead>
                                 <tr>
@@ -109,17 +110,7 @@ const Packages = () => {
                             </tbody>
                         </table>
 
- {/* Pagination controls */}
-    
- <nav aria-label="Page navigation example ">
-  <ul class="pagination jutify-content-end mt-3">
-  {Array.from({ length: totalPages }, (_, index) => (
-    <li class="page-item"><a class="page-link" href="#" key={index} onClick={() => setPage(index + 1)}>
-    {index + 1}
-</a></li>
-  ))}
-  </ul>
-</nav>
+
 
 
         

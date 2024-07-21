@@ -1,7 +1,18 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 const Topbar = () => {
+        
+    const navigate = useNavigate();
+    const userCheck = localStorage.getItem("user")
+
+    const logout= ()=>{
+
+      localStorage.removeItem("user")
+      localStorage.removeItem("token")
+      navigate("/login")
+    }
+
   return (
     <>
     
@@ -21,8 +32,9 @@ const Topbar = () => {
                     </ul>
                 </div>
                 <div class="user_box ml-auto">
-                    <div class="user_box_login user_box_link"><NavLink to="/login">login</NavLink></div>
-                    <div class="user_box_register user_box_link"><NavLink to="/register">register</NavLink></div>
+                    {userCheck ?  <div class="user_box_register user_box_link"><NavLink onClick={()=>{logout()}} >logout</NavLink></div>:       <div class="user_box_login user_box_link"><NavLink to="/login">login</NavLink></div>
+                    }
+               
                 </div>
             </div>
         </div>

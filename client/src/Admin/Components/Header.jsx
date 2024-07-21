@@ -1,6 +1,16 @@
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom';
 const Header = () => {
+
+    const navigate = useNavigate();
+    const userCheck = localStorage.getItem("user")
+
+    const logout= ()=>{
+
+      localStorage.removeItem("user")
+      localStorage.removeItem("token")
+      navigate("/login")
+    }
   return (
     <>
 
@@ -74,12 +84,8 @@ const Header = () => {
                                             <i className="fa fa-angle-down ml-2 opacity-8"></i>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" className="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" className="dropdown-item">User Account</button>
-                                            <button type="button" tabindex="0" className="dropdown-item">Settings</button>
-                                            <h6 tabindex="-1" className="dropdown-header">Header</h6>
-                                            <button type="button" tabindex="0" className="dropdown-item">Actions</button>
-                                            <div tabindex="-1" className="dropdown-divider"></div>
-                                            <button type="button" tabindex="0" className="dropdown-item">Dividers</button>
+                                            <button type="button" onClick={()=>logout()} tabindex="0" className="dropdown-item">Logout</button>
+                                           
                                         </div>
                                     </div>
                                 </div>

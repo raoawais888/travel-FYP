@@ -41,14 +41,22 @@ const Sidebar = () => {
                     </div>    <div className="scrollbar-sidebar">
                         <div className="app-sidebar__inner">
                             <ul className="vertical-nav-menu">
-                                <li className="app-sidebar__heading">Dashboards</li>
+                                <li className="app-sidebar__heading">Sliders</li>
                                 <li>
-                                    <NavLink to="/admin/dashboard" className="">
+                                    <NavLink to="/admin/add-slider" className="">
                                         
                                         <i class="fa-solid fa-gauge metismenu-icon"></i>
-                                        Dashboard
+                                        Add Sliders
                                     </NavLink>
                                 </li>
+
+
+                                <li>
+            <NavLink to="/admin/sliders">
+            <i class="fa-solid fa-gauge metismenu-icon"></i>
+        sliders
+            </NavLink>
+          </li>
 
 
                                 {/* {user.role === 1 && ( */}
@@ -71,7 +79,7 @@ const Sidebar = () => {
                                 <li className="app-sidebar__heading">Users</li>
                                 <li>
                                     <NavLink to="/admin/add-user">
-                                    <i class="fa-solid fa-user metismenu-icon"></i>Add User
+                                    <i class="fa-solid fa-user metismenu-icon"></i> Admin User
                                     </NavLink>
                                 </li>
                                 <li>
@@ -102,21 +110,15 @@ const Sidebar = () => {
                                 
 
 
-                                <li className="app-sidebar__heading">Offers</li>
+                                <li className="app-sidebar__heading">Bookings</li>
                                 <li>
-                                    <NavLink to="/admin/add-offer">
+                                    <NavLink to="/admin/bookings">
                                     <i class="fa-solid fa-tags metismenu-icon"></i>
                                        
-                                        Add Offer
+                                        Bookings
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/admin/offers">
-                                    <i class="fa-solid fa-tags metismenu-icon"></i>
-                                       
-                                        All Offers
-                                    </NavLink>
-                                </li>
+                                
                                 
                                
                                 <li className="app-sidebar__heading">Blogs</li>
@@ -130,6 +132,20 @@ const Sidebar = () => {
                                     <NavLink to="/admin/blogs">
                                     <i class="fa-brands fa-blogger-b metismenu-icon"></i>
                                         All Blogs
+                                    </NavLink>
+                                </li>
+
+                                <li className="app-sidebar__heading">Testimonials</li>
+                                <li>
+                                    <NavLink to="/admin/add-testimonial">
+                                    <i class="fa-brands fa-blogger-b metismenu-icon"></i>
+                                   Add   Testimonial
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/admin/testimonials">
+                                    <i class="fa-brands fa-blogger-b metismenu-icon"></i>
+                                    Testimonials
                                     </NavLink>
                                 </li>
                                 

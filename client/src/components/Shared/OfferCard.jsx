@@ -5,8 +5,8 @@ const OfferCard = ({data}) => {
   return (
     <div class="offers_item rating_4">
 							<div class="row">
-								<div class="col-lg-1 temp_col"></div>
-								<div class="col-lg-3 col-1680-4">
+							
+								<div class="col-lg-5 col-1680-4">
 									<div class="offers_image_container">
 										{/* <!-- Image by https://unsplash.com/@kensuarez --> */}
 										{data.images && data.images.length > 0 && (
@@ -20,7 +20,7 @@ const OfferCard = ({data}) => {
 																								<div class="offer_name"><NavLink to={`/package-details/${data._id}`}>{data.location} </NavLink></div>
 									</div>
 								</div>
-								<div class="col-lg-8">
+								<div class="col-lg-7">
 									<div class="offers_content">
 										<div class="offers_price">${data.price} <span>per night</span></div>
 										

@@ -5,9 +5,12 @@ import { useFormik } from 'formik';
 import UserSchema from '../Validations/UserValidation';
 import ApiRequest from '../helper/ApiRequest';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import axios from "axios"
 
 const Login = () => {
 
+	const navigate = useNavigate();
 	
 	const initialValues = {
 		email: '',
@@ -20,14 +23,16 @@ const {values , errors , handleChange , handleSubmit , handleBlur }	= useFormik(
 	onSubmit: async (values , {resetForm})=>{
 	
 		
-		const resposne = await ApiRequest("/login",values);
-		  if(resposne.success){
-			toast.success(resposne.message);
-			localStorage.setItem('token', resposne.token);
-			localStorage.setItem('user', JSON.stringify(resposne.user));
+		const response =  await axios.post('http://localhost:8000/login', values);
+		console.log(response);
+		  if(response.data.success){
+			toast.success(response.data.message);
+			localStorage.setItem('token', response.data.token);
+			localStorage.setItem('user', JSON.stringify(response.data.user));
+			navigate("/admin/sliders")
 
 		  }else{
-			toast.error(resposne.message);
+			toast.error(response.data.message);
 		  }
 	
 		 resetForm(); 

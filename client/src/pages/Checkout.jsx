@@ -1,311 +1,179 @@
-import React from 'react';
-import MasterLyout from '../MasterLyout';
-import Banner from '../components/Shared/Banner';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
-import UserSchema from '../Validations/UserValidation';
-import ApiRequest from '../helper/ApiRequest';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import MasterLayout from '../MasterLyout';
+import Banner from '../components/Shared/Banner';
 import PayPalButton from '../components/PayPalButton';
-
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
+  const navigate = useNavigate()
+  const [data, setData] = useState({ images: [] });
+  const { packageId } = useParams();
 
- 
-
+  useEffect(() => {
+    const fetchPackage = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/admin/packages/${packageId}`);
     
+        setData(response.data.package);
+      } catch (error) {
+        console.error('Error fetching package:', error);
+      }
+    };
+
+    fetchPackage();
+  }, [packageId]);
+
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required('First name is required'),
+    lastName: Yup.string().required('Last name is required'),
+    number: Yup.string().required('Username is required'),
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    address: Yup.string().required('Address is required'),
+    members: Yup.number().required('Members is required').min(1, 'At least one member is required'),
+  });
 
 
-  const formik = useFormik({
+ const {values , handleChange , handleSubmit , errors}  = useFormik({
     initialValues: {
       firstName: '',
-      lastName: '',
+      number: '',
       username: '',
       email: '',
       address: '',
-      address2: '',
-      country: '',
-      state: '',
-      zip: '',
-      paymentMethod: 'credit',
-      ccName: '',
-      ccNumber: '',
-      ccExpiration: '',
-      ccCVV: '',
+      members: '', 
+      packageId: packageId
     },
-  
+    validationSchema,
     onSubmit: async (values) => {
+      console.log("submit");
       try {
-        const response = await ApiRequest.post('/login', values);
-        toast.success('Login successful!');
+        const response =  await axios.post('http://localhost:8000/book-now', values);
+         if(response.data.success){
+          toast.success(response.data.message);
+          navigate("/offers")
+         }
+  
       } catch (error) {
-        toast.error('Login failed.');
+        toast.error(response.data.message);
       }
     },
   });
 
   return (
-    <MasterLyout>
-      <Banner title="Login" image="url(/images/contact_background.jpg)" />
-   
-
-    
-
-      <div className="container">
-        <div className="py-5 text-center">
-          <h2>Checkout form</h2>
-          <p className="lead">
-            Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.
-          </p>
-        </div>
-
+    <MasterLayout>
+      <Banner title="Checkout" image="url(/images/contact_background.jpg)" />
+      <div className="container mt-5">
         <div className="row">
           <div className="col-md-4 order-md-2 mb-4">
             <h4 className="d-flex justify-content-between align-items-center mb-3">
-              <span className="text-muted">Your cart</span>
-              <span className="badge badge-secondary badge-pill">3</span>
+              <span className="text-muted">Booking Item</span>
             </h4>
             <ul className="list-group mb-3">
               <li className="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
-                  <h6 className="my-0">Product name</h6>
-                  <small className="text-muted">Brief description</small>
+                  <h6 className="my-0">Package name</h6>
+                  <small className="text-muted">{data && data.location }</small>
                 </div>
-                <span className="text-muted">$12</span>
-              </li>
-              <li className="list-group-item d-flex justify-content-between lh-condensed">
-                <div>
-                  <h6 className="my-0">Second product</h6>
-                  <small className="text-muted">Brief description</small>
-                </div>
-                <span className="text-muted">$8</span>
-              </li>
-              <li className="list-group-item d-flex justify-content-between lh-condensed">
-                <div>
-                  <h6 className="my-0">Third item</h6>
-                  <small className="text-muted">Brief description</small>
-                </div>
-                <span className="text-muted">$5</span>
-              </li>
-              <li className="list-group-item d-flex justify-content-between bg-light">
-                <div className="text-success">
-                  <h6 className="my-0">Promo code</h6>
-                  <small>EXAMPLECODE</small>
-                </div>
-                <span className="text-success">-$5</span>
-              </li>
-              <li className="list-group-item d-flex justify-content-between">
-                <span>Total (USD)</span>
-                <strong>$20</strong>
+                <span className="text-muted">${data.price}</span>
               </li>
             </ul>
-
-            <form className="card p-2">
-              <div className="input-group">
-                <input type="text" className="form-control" placeholder="Promo code" />
-                <div className="input-group-append">
-                  <button type="submit" className="btn btn-secondary">Redeem</button>
-                </div>
-              </div>
-            </form>
           </div>
-
           <div className="col-md-8 order-md-1">
             <h4 className="mb-3">Billing address</h4>
-            <form className="needs-validation" noValidate onSubmit={formik.handleSubmit}>
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="firstName">First name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="firstName"
-                    name="firstName"
-                    value={formik.values.firstName}
-                    onChange={formik.handleChange}
-                    required
-                  />
-                  {formik.errors.firstName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.firstName}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="lastName">Last name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="lastName"
-                    name="lastName"
-                    value={formik.values.lastName}
-                    onChange={formik.handleChange}
-                    required
-                  />
-                  {formik.errors.lastName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.lastName}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-<div className="row">
-              <div className="col-md-6 mb-3">
-              <div className="mb-3">
-                <label htmlFor="username">Number</label>
-                <div className="input-group">
-               
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    name="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    required
-                  />
-                  {formik.errors.username && (
-                    <div className="invalid-feedback" style={{ width: '100%' }}>
-                      {formik.errors.username}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-</div>
-
-<div className="col-md-6 mb-3">
-              <div className="mb-3">
-                <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  name="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                />
-                {formik.errors.email && (
-                  <div className="invalid-feedback">
-                    {formik.errors.email}
-                  </div>
-                )}
-              </div>
-              </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="address">Address</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="address"
-                  name="address"
-                  value={formik.values.address}
-                  onChange={formik.handleChange}
-                  required
-                />
-                {formik.errors.address && (
-                  <div className="invalid-feedback">
-                    {formik.errors.address}
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="address2">Address 2 <span className="text-muted">(Optional)</span></label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="address2"
-                  name="address2"
-                  value={formik.values.address2}
-                  onChange={formik.handleChange}
-                />
-              </div>
-
-              <div className="row">
-                <div className="col-md-5 mb-3">
-                  <label htmlFor="country">Country</label>
-                  <select
-                    className="custom-select d-block w-100"
-                    id="country"
-                    name="country"
-                    value={formik.values.country}
-                    onChange={formik.handleChange}
-                    required
-                  >
-                    <option value="">Choose...</option>
-                    <option>United States</option>
-                  </select>
-                  {formik.errors.country && (
-                    <div className="invalid-feedback">
-                      {formik.errors.country}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="state">State</label>
-                  <select
-                    className="custom-select d-block w-100"
-                    id="state"
-                    name="state"
-                    value={formik.values.state}
-                    onChange={formik.handleChange}
-                    required
-                  >
-                    <option value="">Choose...</option>
-                    <option>California</option>
-                  </select>
-                  {formik.errors.state && (
-                    <div className="invalid-feedback">
-                      {formik.errors.state}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-3 mb-3">
-                  <label htmlFor="zip">Zip</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="zip"
-                    name="zip"
-                    value={formik.values.zip}
-                    onChange={formik.handleChange}
-                    required
-                  />
-                  {formik.errors.zip && (
-                    <div className="invalid-feedback">
-                      {formik.errors.zip}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <hr className="mb-4" />
-              
-
-              <h4 className="mb-3">Payment</h4>
-
-          
-              <PayPalButton />
+            <form onSubmit={handleSubmit}>
+  <div className="row">
+    <div className="col-md-6 mb-3">
+      <label htmlFor="firstName">First name</label>
+      <input
+        type="text"
+        className="form-control"
+        id="firstName"
+        name="firstName"
+        value={values.firstName}
+        onChange={handleChange}
+      />
+      <p className="text-danger">{errors.firstName}</p>
+    </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="lastName">Last name</label>
+      <input
+        type="text"
+        className="form-control"
+        id="lastName"
+        name="lastName"
+        value={values.lastName}
+        onChange={handleChange}
+      />
+      <p className="text-danger">{errors.lastName}</p>
+    </div>
+  </div>
+  <div className="row">
+    <div className="col-md-6 mb-3">
+      <label htmlFor="number">Number</label>
+      <input
+        type="text"
+        className="form-control"
+        id="number"
+        name="number"
+        value={values.number}
+        onChange={handleChange}
+      />
+      <p className="text-danger">{errors.number}</p>
+    </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        className="form-control"
+        id="email"
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+      />
+      <p className="text-danger">{errors.email}</p>
+    </div>
+  </div>
+  <div className="mb-3">
+    <label htmlFor="address">Address</label>
+    <input
+      type="text"
+      className="form-control"
+      id="address"
+      name="address"
+      value={values.address}
+      onChange={handleChange}
+    />
+    <p className="text-danger">{errors.address}</p>
+  </div>
+  <div className="row">
+    <div className="col-md-12 mb-3">
+      <label htmlFor="members">Members</label>
+      <input
+        type="text"
+        className="form-control"
+        id="members"
+        name="members"
+        value={values.members}
+        onChange={handleChange}
+      />
+      <p className="text-danger">{errors.members}</p>
+    </div>
+  </div>
+  <button type="submit" className="button search_button">Book Now</button>
+</form>
 
 
-           
-            
-         
-            </form>
+            <h4 className="mb-3 mt-5">Payment</h4>
+            {/* <PayPalButton /> */}
           </div>
         </div>
-
-        <footer className="my-5 pt-5 text-muted text-center text-small">
-          <p className="mb-1">&copy; 2017-2019 Company Name</p>
-          <ul className="list-inline">
-            <li className="list-inline-item"><a href="#">Privacy</a></li>
-            <li className="list-inline-item"><a href="#">Terms</a></li>
-            <li className="list-inline-item"><a href="#">Support</a></li>
-          </ul>
-        </footer>
       </div>
-    </MasterLyout>
+    </MasterLayout>
   );
 };
 

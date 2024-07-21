@@ -21,10 +21,17 @@ import EditPackage from "./Admin/Pages/Package/EditPackage";
 import EditAgency from './Admin/Pages/Agency/EditAgency';
 import PackageDetails from './pages/PackageDetails';
 import Checkout from './pages/Checkout';
+import Booking from "./Admin/Pages/booking/Booking"
+import ViewBooking from './Admin/Pages/booking/ViewBooking';
+import AddSlider from './Admin/Pages/slider/AddSlider';
+import Slider from './Admin/Pages/slider/Slider';
+import Addtestimonal from './Admin/Pages/testimonials/Addtestimonal';
+import Testimonials from './Admin/Pages/testimonials/Testimonials';
 import ProtectedRoute from './ProtectedRoute'; // Import the ProtectedRoute component
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (
@@ -71,6 +78,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditAgency />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/booking/view/:agencyId"
+          element={
+            <ProtectedRoute>
+              <ViewBooking />
             </ProtectedRoute>
           }
         />
@@ -123,10 +138,52 @@ function App() {
           }
         />
         <Route
+          path='/admin/bookings'
+          element={
+            <ProtectedRoute>
+              <Booking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path='/admin/offers'
           element={
             <ProtectedRoute>
               <AdminOffers />
+            </ProtectedRoute>
+          }
+        />
+
+
+<Route
+          path='/admin/Add-slider'
+          element={
+            <ProtectedRoute>
+              <AddSlider />
+            </ProtectedRoute>
+          }
+        />
+<Route
+          path='/admin/sliders'
+          element={
+            <ProtectedRoute>
+              <Slider />
+            </ProtectedRoute>
+          }
+        />
+<Route
+          path='/admin/add-testimonial'
+          element={
+            <ProtectedRoute>
+              <Addtestimonal />
+            </ProtectedRoute>
+          }
+        />
+<Route
+          path='/admin/testimonials'
+          element={
+            <ProtectedRoute>
+              <Testimonials />
             </ProtectedRoute>
           }
         />
