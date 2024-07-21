@@ -41,6 +41,9 @@ const Sidebar = () => {
                     </div>    <div className="scrollbar-sidebar">
                         <div className="app-sidebar__inner">
                             <ul className="vertical-nav-menu">
+
+                            {user.role === 1 && (
+                                      <>
                                 <li className="app-sidebar__heading">Sliders</li>
                                 <li>
                                     <NavLink to="/admin/add-slider" className="">
@@ -59,8 +62,8 @@ const Sidebar = () => {
           </li>
 
 
-                                {/* {user.role === 1 && ( */}
-        <>
+                               
+  
           <li className="app-sidebar__heading">Agencies</li>
           <li>
             <NavLink to="/admin/add-agency">
@@ -91,8 +94,10 @@ const Sidebar = () => {
                                 </li>
                                 </>
 
-{/* )} */}
+)}
                                 <li className="app-sidebar__heading">Packages</li>
+                                
+                            {user.role === 2 && (
                                 <li>
                                     <NavLink to="/admin/add-package">
                                         
@@ -100,6 +105,8 @@ const Sidebar = () => {
                                         Add package
                                     </NavLink>
                                 </li>
+
+)}
                                 <li>
                                     <NavLink to="/admin/packages">
                                         
@@ -119,8 +126,8 @@ const Sidebar = () => {
                                     </NavLink>
                                 </li>
                                 
-                                
-                               
+                                {user.role === 1 && (
+                               <>
                                 <li className="app-sidebar__heading">Blogs</li>
                                 <li>
                                     <NavLink to="/admin/add-blog">
@@ -149,8 +156,8 @@ const Sidebar = () => {
                                     </NavLink>
                                 </li>
                                 
-                               
-                                
+                                </>
+                            )}
                             </ul>
                         </div>
                     </div>

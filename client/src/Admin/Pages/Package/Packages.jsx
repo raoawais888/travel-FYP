@@ -19,7 +19,7 @@ const Packages = () => {
         const userGet = JSON.parse(localStorage.getItem("user"))
         
 
-        const response = await axios.get(`http://localhost:8000/admin/packages/${userGet._id}`);
+        const response = await axios.get(`http://localhost:8000/admin/packages`);
         setPackages(response.data.packages);
         setTotalPages(response.data.totalPages);
         console.log("all packages ",setPackages)
@@ -92,20 +92,20 @@ const Packages = () => {
                             </thead>
                             <tbody>
 
-                            { packages.map((data) => (
-                                <tr key={data._id}>
-                            
-                                    <td>{data.location}</td>
-                                    <td>{data.price}</td>
-                                    <td>{`${moment(data.startDate).format('YYYY-MM-DD')} To  ${ moment(data.endDate).format('YYYY-MM-DD') }`}</td>
-                                    <td> <img src={`http://localhost:8000/${data.images[0]}`} alt="" width={30} height={30} /> </td>
-                                      <td> <button className='btn btn-small btn-primary ' onClick={() => handleEdit(data._id)}>Edit </button>  </td>
-                                      <td> <button className='btn btn-small btn-danger' onClick={()=>{handleRemove(data._id)}} >remove </button>  </td>
-                                   
-                                </tr>
-                                
-                               
-                            ))}
+                            {packages.length > 0 ? (
+                  packages.map((data) => (
+                    <tr key={data._id}>
+                      <td>{data.location}</td>
+                      <td>{data.price}</td>
+                      <td>{`${moment(data.startDate).format('YYYY-MM-DD')} To ${moment(data.endDate).format('YYYY-MM-DD')}`}</td>
+                      <td><img src={`http://localhost:8000/${data.images[0]}`} alt="" width={30} height={30} /></td>
+                      <td><button className='btn btn-small btn-primary' onClick={() => handleEdit(data._id)}>Edit</button></td>
+                      <td><button className='btn btn-small btn-danger' onClick={() => handleRemove(data._id)}>Remove</button></td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr><td colSpan="6">No packages found</td></tr>
+                )}
 
                             </tbody>
                         </table>
